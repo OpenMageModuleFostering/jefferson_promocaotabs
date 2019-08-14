@@ -49,7 +49,11 @@
 	
 	<cms_index_index>
 		<reference name="content">
-			<block type="promocaotabs/promocaotabs" name="promocaotabshome" template="promocaotabs/promocaotabshome.phtml" before="" />
+			<block type="promocaotabs/promocaotabs" name="promocaotabshome" before="">
+				<action method="setTemplate" ifconfig="catalog/jefferson_promocaotabs/enable">
+					<template>promocaotabs/promocaotabshome.phtml</template>
+				</action>
+			</block>
 		</reference>
 	</cms_index_index>
 	

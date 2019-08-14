@@ -35,8 +35,6 @@
 	$getImgSize = $this->getImgSize();
 	$cat 		= $this->getCatsArray();
 	$qtyCat		= $this->getCategoryQty();
-	$enabled	= $this->getActive();
-	if($enabled == 1):
 ?>
 <div class="container-fluid container-tabs-jefferson">
 	<div class="row-fluid">
@@ -75,11 +73,34 @@
 								                
 								                <a href="<?php echo $item->getProductUrl() ?>" 
 								                	title="<?php echo $this->stripTags($this->getImageLabel($item, 'small_image'), null, true) ?>"  class="product-image">
-													<img src="<?php echo $this->helper('catalog/image')->init($item, 'small_image')->keepFrame(false)->resize($getImgSize); ?>" />
+													<img src="<?php echo $this->helper('catalog/image')->init($item, 'small_image')->keepFrame(true)->resize($getImgSize,$getImgSize); ?>" />
 							             		</a>
 							             		
 								                <div class="container_info_bx">
-										             
+  										              <?php 
+										              	$today 					=  strtotime(date('Y-m-d'));
+												     	
+												        $specialPriceFromDate 	= $item->getSpecialFromDate();
+												        
+												        $specialPriceToDate 	= $item->getSpecialToDate();
+										              ?>
+											              
+											              <?php if($item->getSpecialPrice() > 0 ): 
+											              
+												        	if($today >= strtotime($specialPriceFromDate) && $today <= strtotime($specialPriceToDate)
+												            || $today >= strtotime( $specialPriceFromDate) && is_null($specialPriceToDate)):
+      
+											              ?>   
+											              
+								        				        <span class="perc">
+													            	<?php echo $this->getPerc($item->getPrice(), $item->getSpecialPrice() );  ?>
+													            </span>	
+													            
+													      <?php 
+													      		endif; 
+													      	endif; 
+													      ?>
+
 										             <a href="<?php echo $item->getProductUrl() ?>" 
 										             title="<?php echo $this->stripTags($this->getImageLabel($item, 'small_image'), null, true) ?>"
 										             class="product-image">   
@@ -94,11 +115,9 @@
 														<?php echo  $this->__($this->getLabelBtn()); ?>
 										              </a>		
 										              
-										              <?php if($item->getSpecialPrice() > 0 ): ?>    
-							        				        <span class="perc">
-												            	<?php echo $this->getPerc($item->getPrice(), $item->getSpecialPrice() );  ?>
-												            </span>	
-												      <?php endif; ?>
+
+												      
+												      
 										              	
 													    <div class="product-secondary">
 																			              	
@@ -151,4 +170,3 @@
 		
 	</div>
 </div>
-<?php endif; ?>

@@ -35,13 +35,21 @@
 			
 			public function getDataProducts($categoryCurrent){
 				
-				$this->_product = Mage::getModel('catalog/product')
+				$storeId = Mage::app()->getStore()->getStoreId();
+				
+				$this->_product = Mage::getSingleton('catalog/product')
 				->getCollection()
 				->joinField('category_id', 'catalog/category_product', 'category_id', 'product_id = entity_id', null, 'left')
-				->addAttributeToSelect('*')
-				->addAttributeToFilter('set_promotion', array('in'=>"1"))
-				->addAttributeToFilter('category_id', array('in'=> array( $categoryCurrent)))
-				->load();
+				->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+				->addFieldToFilter(array(
+					        		array('attribute'=>'set_promotion','in'=> '1'),
+					        		))
+				->addFieldToFilter(array(
+					        		array('attribute'=>'category_id','in'=> array($categoryCurrent)),
+					        		))	        		
+				->addStoreFilter($storeId);
+				
+				$this->_product->getSelect()->group('e.entity_id');
 				
 				foreach($this->_product as $this->item);
 				
@@ -59,7 +67,7 @@
 			public function getCategoryName($category)
 		    {
 		        
-		       $this->category = Mage::getModel('catalog/category')
+		       $this->category = Mage::getSingleton('catalog/category')
 		       ->load($category);
 				$cat = $this->category->getTitleCustomTabs();
 				if(!empty($cat)){

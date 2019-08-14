@@ -23,7 +23,7 @@ class Jefferson_Promocaotabs_Model_System_Config_Source_Category extends Mage_Ad
 {
     public function toOptionArray($addEmpty = true)
     {
-        $collection = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*');
+        $collection = Mage::getSingleton('catalog/category')->getCollection()->addAttributeToSelect('*');
 
         $options = array();       
         /*if ($addEmpty) {
